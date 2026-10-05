@@ -2,7 +2,8 @@ var connection = new Postmonger.Session();
 
 var payload = {};
 
-$(window).ready(function () {
+$(function () {
+    console.log("Custom Activity carregada");
     connection.trigger("ready");
 });
 
