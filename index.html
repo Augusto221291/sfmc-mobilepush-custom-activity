@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MobilePush Legado</title>
+
+    <script src="https://code.jquery.com/jquery-3.11.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/postmonger/0.0.1/postmonger.js"></script>
+    <script src="customActivity.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #181818;
+        }
+
+        .container {
+            max-width: 520px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #c9c9c9;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .help {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .error {
+            display: none;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #ba0517;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>MobilePush Legado</h2>
+
+    <label for="messageId">
+        Message ID
+    </label>
+
+    <input
+        id="messageId"
+        type="text"
+        placeholder="Ex.: Nzg5NzoxMTQ6MA"
+        maxlength="255"
+    >
+
+    <div class="help">
+        Informe o Message ID da API Triggered Message configurada na BU legado.
+    </div>
+
+    <div id="messageIdError" class="error">
+        Informe um Message ID antes de continuar.
+    </div>
+
+</div>
+
+</body>
+</html>
