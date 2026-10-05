@@ -1,0 +1,88 @@
+{
+  "workflowApiVersion": "1.1",
+
+  "metaData": {
+    "category": "message",
+    "isConfigured": false
+  },
+
+  "type": "Rest",
+
+  "lang": {
+    "pt-BR": {
+      "name": "MobilePush Legado",
+      "description": "Disparo MobilePush utilizando a BU legado"
+    }
+  },
+
+  "arguments": {
+    "execute": {
+      "inArguments": [
+        {
+          "subscriberKey": "{{Contact.Key}}"
+        },
+        {
+          "messageId": ""
+        }
+      ],
+
+      "outArguments": [],
+
+      "timeout": 10000,
+
+      "retryCount": 0,
+
+      "retryDelay": 1000,
+
+      "concurrentRequests": 1,
+
+      "url": "https://mcs8rdvxn4sb8-dvg5m9xd9p1hty.pub.sfmc-content.com/wkqadpcgour"
+    }
+  },
+
+  "configurationArguments": {
+    "applicationExtensionKey": "PREENCHER_DEPOIS"
+  },
+
+  "userInterfaces": {
+    "configModal": {
+      "url": "index.html",
+      "height": 350,
+      "width": 600,
+      "fullscreen": false
+    }
+  },
+
+  "wizardSteps": [
+    {
+      "label": "Configuração",
+      "key": "1",
+      "active": true
+    }
+  ],
+
+  "schema": {
+    "arguments": {
+      "execute": {
+        "inArguments": [
+          {
+            "subscriberKey": {
+              "dataType": "Text",
+              "isNullable": false,
+              "direction": "In"
+            }
+          },
+          {
+            "messageId": {
+              "dataType": "Text",
+              "isNullable": false,
+              "direction": "In"
+            }
+          }
+        ],
+
+        "outArguments": []
+      }
+    }
+  }
+}
