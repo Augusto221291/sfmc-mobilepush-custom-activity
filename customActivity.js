@@ -2,9 +2,21 @@ var connection = new Postmonger.Session();
 
 var payload = {};
 
+
+/* ============================
+   READY
+   ============================ */
+
 $(function () {
+
     connection.trigger("ready");
+
 });
+
+
+/* ============================
+   INIT ACTIVITY
+   ============================ */
 
 connection.on(
     "initActivity",
@@ -18,6 +30,7 @@ connection.on(
             payload.arguments.execute.inArguments
                 ? payload.arguments.execute.inArguments
                 : [];
+
 
         for (
             var i = 0;
@@ -42,6 +55,7 @@ connection.on(
 
         }
 
+
         connection.trigger(
             "updateButton",
             {
@@ -55,14 +69,28 @@ connection.on(
     }
 );
 
+
+/* ============================
+   CAMPO MESSAGE ID
+   ============================ */
+
 $("#messageId").on(
     "input",
     function () {
 
         $("#messageIdError").hide();
 
+        $("#messageId").removeClass(
+            "input-error"
+        );
+
     }
 );
+
+
+/* ============================
+   DONE
+   ============================ */
 
 connection.on(
     "clickedNext",
@@ -73,21 +101,48 @@ connection.on(
                 .val()
                 .trim();
 
+
+        /* ----------------------------
+           VALIDAÇÃO
+           ---------------------------- */
+
         if (!messageId) {
 
             $("#messageIdError").show();
+
+            $("#messageId").addClass(
+                "input-error"
+            );
+
+            /*
+             * Importante:
+             * devolve o controle ao Journey Builder
+             * quando a validação falha.
+             */
+            connection.trigger("ready");
 
             return;
 
         }
 
+
         $("#messageIdError").hide();
+
+        $("#messageId").removeClass(
+            "input-error"
+        );
+
+
+        /* ----------------------------
+           PAYLOAD
+           ---------------------------- */
 
         payload.arguments =
             payload.arguments || {};
 
         payload.arguments.execute =
             payload.arguments.execute || {};
+
 
         payload.arguments.execute.inArguments = [
 
@@ -103,11 +158,17 @@ connection.on(
 
         ];
 
+
         payload.metaData =
             payload.metaData || {};
 
         payload.metaData.isConfigured =
             true;
+
+
+        /* ----------------------------
+           SALVAR E FECHAR
+           ---------------------------- */
 
         connection.trigger(
             "updateActivity",
