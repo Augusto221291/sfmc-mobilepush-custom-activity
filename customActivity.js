@@ -9,6 +9,8 @@ var payload = {};
 
 $(function () {
 
+    console.log("[CA] carregada");
+
     connection.trigger("ready");
 
 });
@@ -19,59 +21,58 @@ $(function () {
    ============================ */
 
 connection.on(
-    "clickedNext",
-    function () {
-
-        var messageId =
-            $("#messageId")
-                .val()
-                .trim();
+    "initActivity",
+    function (data) {
 
         console.log(
-            "clickedNext - messageId:",
-            messageId
+            "[CA] initActivity recebido",
+            data
         );
 
-        if (!messageId) {
+        payload = data || {};
 
-            $("#messageIdError").show();
+        var inArguments =
+            payload.arguments &&
+            payload.arguments.execute &&
+            payload.arguments.execute.inArguments
+                ? payload.arguments.execute.inArguments
+                : [];
 
-            connection.trigger("ready");
 
-            return;
+        for (
+            var i = 0;
+            i < inArguments.length;
+            i++
+        ) {
+
+            var arg = inArguments[i];
+
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    arg,
+                    "messageId"
+                )
+            ) {
+
+                $("#messageId").val(
+                    arg.messageId || ""
+                );
+
+            }
+
         }
 
-        $("#messageIdError").hide();
-
-        payload.arguments =
-            payload.arguments || {};
-
-        payload.arguments.execute =
-            payload.arguments.execute || {};
-
-        payload.arguments.execute.inArguments = [
-            {
-                subscriberKey: "{{Contact.Key}}"
-            },
-            {
-                messageId: messageId
-            }
-        ];
-
-        payload.metaData =
-            payload.metaData || {};
-
-        payload.metaData.isConfigured = true;
-
-        console.log(
-            "Payload enviado ao updateActivity:",
-            JSON.stringify(payload)
-        );
 
         connection.trigger(
-            "updateActivity",
-            payload
+            "updateButton",
+            {
+                button: "next",
+                text: "done",
+                visible: true,
+                enabled: true
+            }
         );
+
     }
 );
 
@@ -98,17 +99,30 @@ connection.on(
     "clickedNext",
     function () {
 
+        console.log(
+            "[CA] clickedNext recebido"
+        );
+
+
         var messageId =
             $("#messageId")
                 .val()
                 .trim();
 
 
+        console.log(
+            "[CA] messageId digitado:",
+            messageId
+        );
+
+
         if (!messageId) {
 
-            $("#messageIdError").show();
+            console.log(
+                "[CA] validação falhou: messageId vazio"
+            );
 
-            connection.trigger("ready");
+            $("#messageIdError").show();
 
             return;
 
@@ -147,9 +161,20 @@ connection.on(
             true;
 
 
+        console.log(
+            "[CA] enviando updateActivity",
+            payload
+        );
+
+
         connection.trigger(
             "updateActivity",
             payload
+        );
+
+
+        console.log(
+            "[CA] updateActivity disparado"
         );
 
     }
