@@ -3,9 +3,13 @@ var connection = new Postmonger.Session();
 var payload = {};
 
 $(function () {
-    console.log("Custom Activity carregada");
     connection.trigger("ready");
 });
+
+
+/* ============================
+   INIT ACTIVITY
+   ============================ */
 
 connection.on("initActivity", function (data) {
 
@@ -18,19 +22,50 @@ connection.on("initActivity", function (data) {
             ? payload.arguments.execute.inArguments
             : [];
 
+
+    var savedAppName = "";
+
     for (var i = 0; i < inArguments.length; i++) {
+
+        var arg = inArguments[i];
 
         if (
             Object.prototype.hasOwnProperty.call(
-                inArguments[i],
+                arg,
                 "messageId"
             )
         ) {
+
             $("#messageId").val(
-                inArguments[i].messageId || ""
+                arg.messageId || ""
             );
+
         }
+
+        if (
+            Object.prototype.hasOwnProperty.call(
+                arg,
+                "appName"
+            )
+        ) {
+
+            savedAppName =
+                arg.appName || "";
+
+        }
+
     }
+
+
+    if (savedAppName) {
+
+        $("#appName").val(savedAppName);
+
+    }
+
+
+    updateMessageExample();
+
 
     connection.trigger(
         "updateButton",
@@ -41,47 +76,162 @@ connection.on("initActivity", function (data) {
             enabled: true
         }
     );
+
 });
 
-connection.on("clickedNext", function () {
 
-    var messageId = $("#messageId")
-        .val()
-        .trim();
+/* ============================
+   APP CHANGE
+   ============================ */
 
-    if (!messageId) {
+$("#appName").on(
+    "change",
+    function () {
 
-        $("#messageIdError").show();
+        $("#appError").hide();
 
-        connection.trigger("ready");
+        updateMessageExample();
 
-        return;
+    }
+);
+
+
+/* ============================
+   MESSAGE ID CHANGE
+   ============================ */
+
+$("#messageId").on(
+    "input",
+    function () {
+
+        $("#messageIdError").hide();
+
+    }
+);
+
+
+/* ============================
+   EXEMPLO POR APP
+   ============================ */
+
+function updateMessageExample() {
+
+    var appName =
+        $("#appName").val();
+
+    var text = "";
+
+
+    if (appName === "zap") {
+
+        text =
+            "Exemplo ZAP Imóveis: Nzg5NzoxMTQ6MA";
+
     }
 
-    $("#messageIdError").hide();
 
-    payload.arguments =
-        payload.arguments || {};
+    if (appName === "vivareal") {
 
-    payload.arguments.execute =
-        payload.arguments.execute || {};
+        text =
+            "Exemplo Viva Real: Nzg5ODoxMTQ6MA";
 
-    payload.arguments.execute.inArguments = [
-        {
-            subscriberKey: "{{Contact.Key}}"
-        },
-        {
-            messageId: messageId
+    }
+
+
+    $("#messageExample").text(text);
+
+}
+
+
+/* ============================
+   DONE
+   ============================ */
+
+connection.on(
+    "clickedNext",
+    function () {
+
+        var appName =
+            $("#appName").val();
+
+        var messageId =
+            $("#messageId")
+                .val()
+                .trim();
+
+
+        var valid = true;
+
+
+        if (!appName) {
+
+            $("#appError").show();
+
+            valid = false;
+
+        } else {
+
+            $("#appError").hide();
+
         }
-    ];
 
-    payload.metaData =
-        payload.metaData || {};
 
-    payload.metaData.isConfigured = true;
+        if (!messageId) {
 
-    connection.trigger(
-        "updateActivity",
-        payload
-    );
-});
+            $("#messageIdError").show();
+
+            valid = false;
+
+        } else {
+
+            $("#messageIdError").hide();
+
+        }
+
+
+        if (!valid) {
+            return;
+        }
+
+
+        payload.arguments =
+            payload.arguments || {};
+
+        payload.arguments.execute =
+            payload.arguments.execute || {};
+
+
+        payload.arguments.execute.inArguments = [
+
+            {
+                subscriberKey:
+                    "{{Contact.Key}}"
+            },
+
+            {
+                messageId:
+                    messageId
+            },
+
+            {
+                appName:
+                    appName
+            }
+
+        ];
+
+
+        payload.metaData =
+            payload.metaData || {};
+
+        payload.metaData.isConfigured =
+            true;
+
+
+        connection.trigger(
+            "updateActivity",
+            payload
+        );
+
+    }
+);
