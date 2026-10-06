@@ -2,8 +2,15 @@ var connection = new Postmonger.Session();
 
 var payload = {};
 
+
+/* ============================
+   READY
+   ============================ */
+
 $(function () {
+
     connection.trigger("ready");
+
 });
 
 
@@ -11,93 +18,59 @@ $(function () {
    INIT ACTIVITY
    ============================ */
 
-connection.on("initActivity", function (data) {
+connection.on(
+    "initActivity",
+    function (data) {
 
-    payload = data || {};
+        payload = data || {};
 
-    var inArguments =
-        payload.arguments &&
-        payload.arguments.execute &&
-        payload.arguments.execute.inArguments
-            ? payload.arguments.execute.inArguments
-            : [];
+        var inArguments =
+            payload.arguments &&
+            payload.arguments.execute &&
+            payload.arguments.execute.inArguments
+                ? payload.arguments.execute.inArguments
+                : [];
 
 
-    var savedAppName = "";
-
-    for (var i = 0; i < inArguments.length; i++) {
-
-        var arg = inArguments[i];
-
-        if (
-            Object.prototype.hasOwnProperty.call(
-                arg,
-                "messageId"
-            )
+        for (
+            var i = 0;
+            i < inArguments.length;
+            i++
         ) {
 
-            $("#messageId").val(
-                arg.messageId || ""
-            );
+            var arg = inArguments[i];
+
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    arg,
+                    "messageId"
+                )
+            ) {
+
+                $("#messageId").val(
+                    arg.messageId || ""
+                );
+
+            }
 
         }
 
-        if (
-            Object.prototype.hasOwnProperty.call(
-                arg,
-                "appName"
-            )
-        ) {
 
-            savedAppName =
-                arg.appName || "";
-
-        }
-
-    }
-
-
-    if (savedAppName) {
-
-        $("#appName").val(savedAppName);
-
-    }
-
-
-    updateMessageExample();
-
-
-    connection.trigger(
-        "updateButton",
-        {
-            button: "next",
-            text: "done",
-            visible: true,
-            enabled: true
-        }
-    );
-
-});
-
-
-/* ============================
-   APP CHANGE
-   ============================ */
-
-$("#appName").on(
-    "change",
-    function () {
-
-        $("#appError").hide();
-
-        updateMessageExample();
+        connection.trigger(
+            "updateButton",
+            {
+                button: "next",
+                text: "done",
+                enabled: true
+            }
+        );
 
     }
 );
 
 
 /* ============================
-   MESSAGE ID CHANGE
+   LIMPAR ERRO AO DIGITAR
    ============================ */
 
 $("#messageId").on(
@@ -111,39 +84,6 @@ $("#messageId").on(
 
 
 /* ============================
-   EXEMPLO POR APP
-   ============================ */
-
-function updateMessageExample() {
-
-    var appName =
-        $("#appName").val();
-
-    var text = "";
-
-
-    if (appName === "zap") {
-
-        text =
-            "Exemplo ZAP Imóveis: Nzg5NzoxMTQ6MA";
-
-    }
-
-
-    if (appName === "vivareal") {
-
-        text =
-            "Exemplo Viva Real: Nzg5ODoxMTQ6MA";
-
-    }
-
-
-    $("#messageExample").text(text);
-
-}
-
-
-/* ============================
    DONE
    ============================ */
 
@@ -151,47 +91,24 @@ connection.on(
     "clickedNext",
     function () {
 
-        var appName =
-            $("#appName").val();
-
         var messageId =
             $("#messageId")
                 .val()
                 .trim();
 
 
-        var valid = true;
-
-
-        if (!appName) {
-
-            $("#appError").show();
-
-            valid = false;
-
-        } else {
-
-            $("#appError").hide();
-
-        }
-
-
         if (!messageId) {
 
             $("#messageIdError").show();
 
-            valid = false;
+            connection.trigger("ready");
 
-        } else {
-
-            $("#messageIdError").hide();
-
-        }
-
-
-        if (!valid) {
             return;
+
         }
+
+
+        $("#messageIdError").hide();
 
 
         payload.arguments =
@@ -211,11 +128,6 @@ connection.on(
             {
                 messageId:
                     messageId
-            },
-
-            {
-                appName:
-                    appName
             }
 
         ];
