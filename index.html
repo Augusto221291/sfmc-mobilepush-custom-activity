@@ -85,6 +85,10 @@
             box-shadow: 0 0 0 1px #0176d3;
         }
 
+        input.input-error {
+            border-color: #ba0517;
+        }
+
         .help {
             margin-top: 8px;
             color: #666666;
@@ -92,21 +96,28 @@
             line-height: 1.4;
         }
 
-        .info-box {
-            margin-top: 24px;
-            padding: 12px 14px;
-            border-left: 3px solid #0176d3;
-            background: #f4f8fc;
-            font-size: 12px;
-            line-height: 1.5;
-            color: #3e3e3c;
-        }
-
         .error {
             display: none;
             margin-top: 8px;
             color: #ba0517;
             font-size: 12px;
+        }
+
+        .info-box {
+            margin-top: 24px;
+            padding: 14px 16px;
+            border-left: 3px solid #0176d3;
+            background: #f4f8fc;
+            color: #3e3e3c;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .info-title {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 700;
+            color: #181818;
         }
     </style>
 </head>
@@ -142,7 +153,7 @@
         >
 
         <div class="help">
-            Use o Message ID da API Triggered Message correspondente ao push configurado na BU legado.
+            Use o Message ID da API Triggered Message correspondente ao push.
         </div>
 
         <div id="messageIdError" class="error">
@@ -152,7 +163,14 @@
     </div>
 
     <div class="info-box">
-        O contato é identificado automaticamente pelo Contact Key da Journey. Não é necessário informar subscriberKey ou DeviceToken.
+
+        <span class="info-title">
+            Onde encontrar o Message ID?
+        </span>
+
+        Na BU legado, acesse o MobilePush correspondente ao aplicativo desejado,
+        abra a mensagem e copie o valor exibido no campo ID.
+
     </div>
 
 </div>
