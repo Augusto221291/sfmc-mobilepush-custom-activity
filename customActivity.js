@@ -4,14 +4,32 @@ var payload = {};
 
 
 /* ============================
+   DEBUG
+   ============================ */
+
+function debug(message) {
+
+    var current =
+        $("#debug").text();
+
+    $("#debug").text(
+        current + "\n" + message
+    );
+
+}
+
+
+/* ============================
    READY
    ============================ */
 
 $(function () {
 
-    console.log("[CA] carregada");
+    debug("1. UI carregada");
 
     connection.trigger("ready");
+
+    debug("2. ready enviado");
 
 });
 
@@ -24,10 +42,7 @@ connection.on(
     "initActivity",
     function (data) {
 
-        console.log(
-            "[CA] initActivity recebido",
-            data
-        );
+        debug("3. initActivity recebido");
 
         payload = data || {};
 
@@ -73,6 +88,8 @@ connection.on(
             }
         );
 
+        debug("4. botão Done configurado");
+
     }
 );
 
@@ -99,9 +116,7 @@ connection.on(
     "clickedNext",
     function () {
 
-        console.log(
-            "[CA] clickedNext recebido"
-        );
+        debug("5. clickedNext recebido");
 
 
         var messageId =
@@ -110,16 +125,16 @@ connection.on(
                 .trim();
 
 
-        console.log(
-            "[CA] messageId digitado:",
+        debug(
+            "6. messageId: " +
             messageId
         );
 
 
         if (!messageId) {
 
-            console.log(
-                "[CA] validação falhou: messageId vazio"
+            debug(
+                "7. ERRO: messageId vazio"
             );
 
             $("#messageIdError").show();
@@ -161,9 +176,13 @@ connection.on(
             true;
 
 
-        console.log(
-            "[CA] enviando updateActivity",
-            payload
+        debug(
+            "7. payload preparado"
+        );
+
+
+        debug(
+            "8. enviando updateActivity"
         );
 
 
@@ -173,8 +192,8 @@ connection.on(
         );
 
 
-        console.log(
-            "[CA] updateActivity disparado"
+        debug(
+            "9. updateActivity enviado"
         );
 
     }
