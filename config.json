@@ -1,10 +1,11 @@
 {
   "workflowApiVersion": "1.1",
 
-  "metaData": {
-    "category": "message",
-    "isConfigured": false
-  },
+ "metaData": {
+  "icon": "images/icon.png",
+  "category": "message",
+  "isConfigured": false
+},
 
   "type": "Rest",
 
