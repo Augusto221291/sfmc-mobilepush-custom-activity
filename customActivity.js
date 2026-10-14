@@ -142,7 +142,8 @@ connection.on(
 
         payload.arguments.execute =
             payload.arguments.execute || {};
-
+payload.arguments.execute.url =
+    "https://mcs8rdvxn4sb8-dvg5m9xd9p1hty.pub.sfmc-content.com/gnzwevxipmu";
 
         payload.arguments.execute.inArguments = [
 
